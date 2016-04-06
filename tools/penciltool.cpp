@@ -28,9 +28,9 @@ void PencilTool::mouseMoveEvent(QMouseEvent *event, ImageItem *image)
         EndPoint = event->pos();
         paint(image);
         BeginPoint = event->pos();
-        qDebug() << "NIGGA2";
+
     }
-     qDebug() << "NIGGA2";
+
 }
 
 void PencilTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)

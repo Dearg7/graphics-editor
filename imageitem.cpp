@@ -51,7 +51,7 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 void ImageItem::mouseMoveEvent(QMouseEvent *event)
 {
     pen->mouseMoveEvent(event,this);
-    qDebug() << "NIGGA";
+
 
 }
 

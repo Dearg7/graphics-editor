@@ -1,17 +1,19 @@
 #ifndef COLORSELECTION_H
 #define COLORSELECTION_H
 
-#include <QLabel>
 #include <QWidget>
+#include <QLabel>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QColor>
-
 
 class ColorSelection : public QLabel
 {
-
-
+    Q_OBJECT
 public:
-   explicit ColorSelection(QColor color,QWidget *parent = 0);
+    explicit ColorSelection(QColor color, QWidget *parent = 0);
+
     ~ColorSelection();
 
 private:
@@ -19,19 +21,15 @@ private:
     QPixmap *pixmapSelection;
     QPainter *painterSelection;
 
-public slots:
 
+public slots:
     void setColor(QColor color);
 
- signals:
-
+signals:
     void changeColor(const QColor color);
-
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-
-
 };
 
 #endif // COLORSELECTION_H

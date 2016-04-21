@@ -1,13 +1,10 @@
 #include "colorselection.h"
 #include <QColorDialog>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QPixmap>
-#include <QDebug>
 
-ColorSelection::ColorSelection(QColor color, QWidget *parent):QLabel(parent)
+
+ColorSelection::ColorSelection(QColor color,QWidget *parent)
+    : QLabel(parent)
 {
-
     setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     colorSelection = new QColor(color);
     pixmapSelection = new QPixmap(30,30);
@@ -55,3 +52,4 @@ void ColorSelection::mousePressEvent(QMouseEvent *event)
     }
 
 }
+

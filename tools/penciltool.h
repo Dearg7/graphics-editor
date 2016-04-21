@@ -25,7 +25,7 @@ public:
 
 private:
     QPoint BeginPoint,EndPoint;
-    void paint(ImageItem *image);
+    void paint(ImageItem *image,QColor Clr);
 
 signals:
 

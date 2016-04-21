@@ -1,6 +1,8 @@
 #include "imageitem.h"
 #include "mainwindow.h"
 #include <QApplication>
+#include "widgets/colorselection.h"
+#include "QHBoxLayout"
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +14,12 @@ int main(int argc, char *argv[])
     w.show();
     ImageItem ww;
     ww.show();
+    QWidget *W = new QWidget();
+    QHBoxLayout *L = new QHBoxLayout();
+    ColorSelection *SR = new ColorSelection(Qt::black);
+    L->addWidget(SR);
+    W->setLayout(L);
+    W->show();
 
 
 

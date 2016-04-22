@@ -18,11 +18,19 @@ public:
     ~ImageItem();
 
    QImage *getImage ();
+   QColor getColor1();
+   QColor getColor2();
+   int getSize();
+   QString currentFile;
 
 
 private:
     QImage *_image ;
     PencilTool *pen ;
+    QColor *color1;
+    QColor *color2;
+    QRect imageRect;
+    int size;
 
 
 
@@ -34,9 +42,17 @@ protected:
 
 
 
+
 signals:
 
+
 public slots:
+    void setColor1(const QColor _color);
+    void setColor2(const QColor _color);
+    void setSize(const int _size);
+    void open();
+    void saveAs();
+    void save();
 };
 
 #endif // IMAGEITEM_H

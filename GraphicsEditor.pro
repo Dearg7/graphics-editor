@@ -15,10 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     imageitem.cpp \
-    tools/penciltool.cpp
+    tools/penciltool.cpp \
+    widgets/colorselection.cpp
+
 
 HEADERS  += mainwindow.h \
     imageitem.h \
-    tools/penciltool.h
+    tools/penciltool.h \
+    widgets/colorselection.h
+
 
 FORMS    += mainwindow.ui

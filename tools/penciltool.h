@@ -6,6 +6,7 @@
 #include <QImage>
 #include <imageitem.h>
 
+
 QT_BEGIN_NAMESPACE
 class ImageItem;
 QT_END_NAMESPACE
@@ -25,7 +26,7 @@ public:
 
 private:
     QPoint BeginPoint,EndPoint;
-    void paint(ImageItem *image);
+    void paint(ImageItem *image,QColor Clr);
 
 signals:
 

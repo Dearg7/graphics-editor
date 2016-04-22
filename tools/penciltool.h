@@ -6,6 +6,7 @@
 #include <QImage>
 #include <imageitem.h>
 
+
 QT_BEGIN_NAMESPACE
 class ImageItem;
 QT_END_NAMESPACE

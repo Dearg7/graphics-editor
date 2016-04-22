@@ -13,8 +13,8 @@ ColorSelection::ColorSelection(QColor color,QWidget *parent)
     painterSelection->fillRect(0,0,30,30,*colorSelection);
     painterSelection->end();
     setPixmap(*pixmapSelection);
-    setFixedHeight(30);
-    setFixedWidth(30);
+    resize(30,30);
+    setMaximumSize(30,30);
 
 }
 

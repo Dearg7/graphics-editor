@@ -61,6 +61,16 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionOpen,SIGNAL(triggered(bool)),image,SLOT(open()));
     QObject::connect(ui->actionSaveAs,SIGNAL(triggered(bool)),image,SLOT(saveAs()));
     QObject::connect(ui->actionSave,SIGNAL(triggered(bool)),image,SLOT(save()));
+
+    //undo and redo
+    ui->actionUndo->setEnabled(false);
+    ui->actionRedo->setEnabled(false);
+    QObject::connect(image->getUndoStack(),SIGNAL(canUndo(bool)),ui->actionUndo,SLOT(setEnabled(bool)));
+    QObject::connect(ui->actionUndo,SIGNAL(triggered(bool)),image->getUndoStack(),SLOT(undo()));
+    QObject::connect(image->getUndoStack(),SIGNAL(canRedo(bool)),ui->actionRedo,SLOT(setEnabled(bool)));
+    QObject::connect(ui->actionRedo,SIGNAL(triggered(bool)),image->getUndoStack(),SLOT(redo()));
+
+
     ui->scrollArea->setBackgroundRole(QPalette :: Dark);
     ui->scrollArea->setWidget(image);
 

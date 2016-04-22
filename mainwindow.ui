@@ -74,7 +74,7 @@
      <string>Правка</string>
     </property>
     <addaction name="actionUndo"/>
-    <addaction name="actionRendo"/>
+    <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
@@ -130,7 +130,7 @@
     <string>Ctrl+Z</string>
    </property>
   </action>
-  <action name="actionRendo">
+  <action name="actionRedo">
    <property name="text">
     <string>Повторить</string>
    </property>

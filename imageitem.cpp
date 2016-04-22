@@ -9,6 +9,7 @@
 #include <QMessageBox>
 
 
+
 ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
 {
     this->setFixedHeight(640);
@@ -20,6 +21,7 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     color2 = new QColor(Qt::white);
     size = 10;
     imageRect = _image->rect();
+    UStack = new UndoStack(this);
 }
 
 ImageItem::~ImageItem()
@@ -30,6 +32,12 @@ ImageItem::~ImageItem()
 QImage *ImageItem::getImage()
 {
     return _image;
+
+}
+
+void ImageItem::setImage(QImage img)
+{
+    *(_image) = img;
 
 }
 
@@ -48,6 +56,12 @@ QColor ImageItem::getColor2()
 int ImageItem::getSize()
 {
     return size;
+
+}
+
+UndoStack *ImageItem::getUndoStack()
+{
+    return UStack;
 
 }
 
@@ -74,6 +88,9 @@ void ImageItem::paintEvent(QPaintEvent *)
 void ImageItem::mousePressEvent(QMouseEvent *event)
 {
 
+
+
+   qDebug() << "Nigga";
    pen->mousePressEvent(event,this);
 }
 
@@ -86,6 +103,7 @@ void ImageItem::mouseMoveEvent(QMouseEvent *event)
 
 void ImageItem::mouseReleaseEvent(QMouseEvent *event)
 {
+     UStack->pushUndoStack(*(_image));
     pen->mouseReleaseEvent(event,this);
 }
 

@@ -7,9 +7,11 @@
 #include <QMouseEvent>
 #include <QImage>
 #include <tools/penciltool.h>
+#include "undostack.h"
+
 
 class PencilTool;
-
+class UndoStack;
 class ImageItem : public QWidget
 {
     Q_OBJECT
@@ -18,13 +20,17 @@ public:
     ~ImageItem();
 
    QImage *getImage ();
+   void setImage(QImage img);
    QColor getColor1();
    QColor getColor2();
    int getSize();
-   QString currentFile;
+   UndoStack *getUndoStack();
+
 
 
 private:
+    UndoStack *UStack;
+    QString currentFile;
     QImage *_image ;
     PencilTool *pen ;
     QColor *color1;

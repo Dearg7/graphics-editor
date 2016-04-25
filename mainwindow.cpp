@@ -8,7 +8,8 @@
 #include <QSlider>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-
+#include <QToolBar>
+#include <QActionGroup>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -57,11 +58,39 @@ MainWindow::MainWindow(QWidget *parent) :
     dock->setMaximumWidth(300);
 
     addDockWidget(Qt::RightDockWidgetArea,dock);
+
+    QActionGroup *GP = new QActionGroup(this);
+    GP->addAction(ui->actionPencil);
+    GP->addAction(ui->actionEraser);
+    GP->addAction(ui->actionEllipse);
+    GP->setExclusive(true);
+
+    //create tool bar
+    QToolBar *TB = new QToolBar();
+    TB->setAllowedAreas(Qt::TopToolBarArea | Qt::LeftToolBarArea);
+    TB->setFloatable(false);
+    TB->setMovable(true);
+
+    TB->insertAction(0,ui->actionSaveAs);
+    TB->insertAction(ui->actionSaveAs,ui->actionSave);
+    TB->insertAction(ui->actionSave,ui->actionOpen);
+    TB->insertAction(ui->actionOpen,ui->actionCreate);
+    TB->addSeparator();
+    TB->insertAction(0,ui->actionEllipse);
+    TB->insertAction(ui->actionEllipse,ui->actionEraser);
+    TB->insertAction(ui->actionEraser,ui->actionPencil);
+
+
+
+
+    addToolBar(Qt::TopToolBarArea, TB);
     // create action connecting
     QObject::connect(ui->actionOpen,SIGNAL(triggered(bool)),image,SLOT(open()));
     QObject::connect(ui->actionSaveAs,SIGNAL(triggered(bool)),image,SLOT(saveAs()));
     QObject::connect(ui->actionSave,SIGNAL(triggered(bool)),image,SLOT(save()));
-
+    QObject::connect(ui->actionPencil,SIGNAL(toggled(bool)),image,SLOT(setPencil(bool)));
+    QObject::connect(ui->actionEraser,SIGNAL(toggled(bool)),image,SLOT(setEraser(bool)));
+    QObject::connect(ui->actionEllipse,SIGNAL(toggled(bool)),image,SLOT(setEllipse(bool)));
     //undo and redo
     ui->actionUndo->setEnabled(false);
     ui->actionRedo->setEnabled(false);

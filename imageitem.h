@@ -7,10 +7,15 @@
 #include <QMouseEvent>
 #include <QImage>
 #include <tools/penciltool.h>
+#include <tools/erasertool.h>
+#include <tools/ellipsetool.h>
 #include "undostack.h"
 
 
+
 class PencilTool;
+class EraserTool;
+class EllipseTool;
 class UndoStack;
 class ImageItem : public QWidget
 {
@@ -33,11 +38,15 @@ private:
     QString currentFile;
     QImage *_image ;
     PencilTool *pen ;
+    EraserTool *eraser;
+    EllipseTool *ellipse;
     QColor *color1;
     QColor *color2;
     QRect imageRect;
     int size;
-
+    bool pencilCheck;
+    bool eraserCheck;
+    bool ellipseCheck;
 
 
 protected:
@@ -59,6 +68,9 @@ public slots:
     void open();
     void saveAs();
     void save();
+    void setPencil(const bool b);
+    void setEraser(const bool b);
+    void setEllipse(const bool b);
 };
 
 #endif // IMAGEITEM_H

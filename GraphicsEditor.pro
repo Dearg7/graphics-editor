@@ -17,14 +17,18 @@ SOURCES += main.cpp\
     imageitem.cpp \
     tools/penciltool.cpp \
     widgets/colorselection.cpp \
-    undostack.cpp
+    undostack.cpp \
+    tools/erasertool.cpp \
+    tools/ellipsetool.cpp
 
 
 HEADERS  += mainwindow.h \
     imageitem.h \
     tools/penciltool.h \
     widgets/colorselection.h \
-    undostack.h
+    undostack.h \
+    tools/erasertool.h \
+    tools/ellipsetool.h
 
 
 FORMS    += mainwindow.ui

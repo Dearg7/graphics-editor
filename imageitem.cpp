@@ -17,10 +17,15 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     _image = new QImage(800,640,QImage::Format_ARGB32_Premultiplied);
     _image->fill(Qt::white);
     pen = new PencilTool();
+    eraser = new EraserTool();
+    ellipse = new EllipseTool();
     color1 = new QColor(Qt::black);
     color2 = new QColor(Qt::white);
     size = 10;
     imageRect = _image->rect();
+    pencilCheck = false;
+    eraserCheck = false;
+    ellipseCheck = false;
     UStack = new UndoStack(this);
 }
 
@@ -91,20 +96,35 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 
 
    qDebug() << "Nigga";
-   pen->mousePressEvent(event,this);
+   UStack->pushUndoStack(*(_image));
+  if (pencilCheck)
+      pen->mousePressEvent(event,this);
+  if (eraserCheck)
+      eraser->mousePressEvent(event,this);
+  if (ellipseCheck)
+      ellipse->mousePressEvent(event,this);
 }
 
 void ImageItem::mouseMoveEvent(QMouseEvent *event)
 {
-    pen->mouseMoveEvent(event,this);
+     if (pencilCheck)
+            pen->mouseMoveEvent(event,this);
+     if (eraserCheck)
+         eraser->mouseMoveEvent(event,this);
+     if (ellipseCheck)
+         ellipse->mouseMoveEvent(event,this);
 
 
 }
 
 void ImageItem::mouseReleaseEvent(QMouseEvent *event)
 {
-     UStack->pushUndoStack(*(_image));
-    pen->mouseReleaseEvent(event,this);
+      if (pencilCheck)
+            pen->mouseReleaseEvent(event,this);
+      if (eraserCheck)
+          eraser->mouseReleaseEvent(event,this);
+      if (ellipseCheck)
+          ellipse->mouseReleaseEvent(event,this);
 }
 
 void ImageItem::setColor1(const QColor _color)
@@ -159,5 +179,20 @@ void ImageItem::save()
         QMessageBox::warning(this,tr("Ошибка сохранение файла"),tr("Файл не сохранён"));
 
 
+}
+
+void ImageItem::setPencil(const bool b)
+{
+    pencilCheck = b;
+}
+
+void ImageItem::setEraser(const bool b)
+{
+    eraserCheck = b;
+}
+
+void ImageItem::setEllipse(const bool b)
+{
+    ellipseCheck = b;
 }
 

@@ -88,6 +88,9 @@
     <addaction name="actionPencil"/>
     <addaction name="actionEraser"/>
     <addaction name="actionEllipse"/>
+    <addaction name="actionRectangle"/>
+    <addaction name="actionLine"/>
+    <addaction name="actionCurveLine"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -198,6 +201,30 @@
    </property>
    <property name="text">
     <string>Эллипс</string>
+   </property>
+  </action>
+  <action name="actionRectangle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Прамоугольник</string>
+   </property>
+  </action>
+  <action name="actionLine">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Прямая</string>
+   </property>
+  </action>
+  <action name="actionCurveLine">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ломаная</string>
    </property>
   </action>
  </widget>

@@ -63,6 +63,9 @@ MainWindow::MainWindow(QWidget *parent) :
     GP->addAction(ui->actionPencil);
     GP->addAction(ui->actionEraser);
     GP->addAction(ui->actionEllipse);
+    GP->addAction(ui->actionRectangle);
+    GP->addAction(ui->actionLine);
+    GP->addAction(ui->actionCurveLine);
     GP->setExclusive(true);
 
     //create tool bar
@@ -76,7 +79,10 @@ MainWindow::MainWindow(QWidget *parent) :
     TB->insertAction(ui->actionSave,ui->actionOpen);
     TB->insertAction(ui->actionOpen,ui->actionCreate);
     TB->addSeparator();
-    TB->insertAction(0,ui->actionEllipse);
+    TB->insertAction(0,ui->actionCurveLine);
+    TB->insertAction(ui->actionCurveLine,ui->actionLine);
+    TB->insertAction(ui->actionLine,ui->actionRectangle);
+    TB->insertAction(ui->actionRectangle,ui->actionEllipse);
     TB->insertAction(ui->actionEllipse,ui->actionEraser);
     TB->insertAction(ui->actionEraser,ui->actionPencil);
 
@@ -91,6 +97,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionPencil,SIGNAL(toggled(bool)),image,SLOT(setPencil(bool)));
     QObject::connect(ui->actionEraser,SIGNAL(toggled(bool)),image,SLOT(setEraser(bool)));
     QObject::connect(ui->actionEllipse,SIGNAL(toggled(bool)),image,SLOT(setEllipse(bool)));
+    QObject::connect(ui->actionRectangle,SIGNAL(toggled(bool)),image,SLOT(setRectangle(bool)));
+    QObject::connect(ui->actionLine,SIGNAL(toggled(bool)),image,SLOT(setLine(bool)));
+    QObject::connect(ui->actionCurveLine,SIGNAL(toggled(bool)),image,SLOT(setCurveLine(bool)));
     //undo and redo
     ui->actionUndo->setEnabled(false);
     ui->actionRedo->setEnabled(false);

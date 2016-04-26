@@ -7,7 +7,7 @@ UndoStack::UndoStack(ImageItem *img,QObject *parent):QObject(parent)
    curr = 0;
    max = 30;
    numRedo = 0;
-   stack.push_back(*(img->getImage()));
+  stack.push_back(*(img->getImage()));
 }
 
 

@@ -1,13 +1,13 @@
-#include "ellipsetool.h"
+#include "linetool.h"
 #include <QPen>
 #include <QPainter>
 
-EllipseTool::EllipseTool(QObject *parent) : QObject(parent)
+LineTool::LineTool(QObject *parent) : QObject(parent)
 {
 
 }
 
-void EllipseTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
+void LineTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
 {
     if ((event->button() == Qt::LeftButton || event->button() == Qt::RightButton))
     {
@@ -17,7 +17,7 @@ void EllipseTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
     }
 }
 
-void EllipseTool::mouseMoveEvent(QMouseEvent *event, ImageItem *image)
+void LineTool::mouseMoveEvent(QMouseEvent *event, ImageItem *image)
 {
     if ((event->buttons() == Qt::LeftButton))
     {
@@ -36,9 +36,10 @@ void EllipseTool::mouseMoveEvent(QMouseEvent *event, ImageItem *image)
 
 
     }
+
 }
 
-void EllipseTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
+void LineTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 {
     if ((event->button() == Qt::LeftButton))
     {
@@ -53,18 +54,29 @@ void EllipseTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
         paint(image,true);
     }
 
-
 }
 
-void EllipseTool::paint(ImageItem *image, bool check)
+void LineTool::paint(ImageItem *image, bool check)
 {
     QPainter painter(image->getImage());
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setPen(QPen(image->getColor1(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     if (check)
-        painter.setBrush(QBrush(image->getColor2()));
-    if (BeginPoint != EndPoint)
-    painter.drawEllipse(QRect(BeginPoint,EndPoint));
+    {
+        painter.setPen(QPen(image->getColor2(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+    } else
+    {
+        painter.setPen(QPen(image->getColor1(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+    }
+
+
+    if (BeginPoint == EndPoint)
+    {
+        painter.drawPoint(BeginPoint);
+    } else
+    {
+        painter.drawLine(BeginPoint,EndPoint);
+    }
     painter.end();
     image->update();
+
 }

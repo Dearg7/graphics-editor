@@ -19,6 +19,9 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     pen = new PencilTool();
     eraser = new EraserTool();
     ellipse = new EllipseTool();
+    rectangle = new RectangleTool();
+    curveLine = new CurveLineTool();
+    line = new LineTool();
     color1 = new QColor(Qt::black);
     color2 = new QColor(Qt::white);
     size = 10;
@@ -26,6 +29,9 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     pencilCheck = false;
     eraserCheck = false;
     ellipseCheck = false;
+    rectangleCheck = false;
+    lineCheck = false;
+    curveLineCheck = false;
     UStack = new UndoStack(this);
 }
 
@@ -96,13 +102,19 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 
 
    qDebug() << "Nigga";
-   UStack->pushUndoStack(*(_image));
+
   if (pencilCheck)
       pen->mousePressEvent(event,this);
   if (eraserCheck)
       eraser->mousePressEvent(event,this);
   if (ellipseCheck)
       ellipse->mousePressEvent(event,this);
+  if (rectangleCheck)
+      rectangle->mousePressEvent(event,this);
+  if (lineCheck)
+      line->mousePressEvent(event,this);
+  if (curveLineCheck)
+      curveLine->mousePressEvent(event,this);
 }
 
 void ImageItem::mouseMoveEvent(QMouseEvent *event)
@@ -113,6 +125,12 @@ void ImageItem::mouseMoveEvent(QMouseEvent *event)
          eraser->mouseMoveEvent(event,this);
      if (ellipseCheck)
          ellipse->mouseMoveEvent(event,this);
+     if (rectangleCheck)
+         rectangle->mouseMoveEvent(event,this);
+     if (lineCheck)
+         line->mouseMoveEvent(event,this);
+     if (curveLineCheck)
+         curveLine->mouseMoveEvent(event,this);
 
 
 }
@@ -125,6 +143,14 @@ void ImageItem::mouseReleaseEvent(QMouseEvent *event)
           eraser->mouseReleaseEvent(event,this);
       if (ellipseCheck)
           ellipse->mouseReleaseEvent(event,this);
+      if (rectangleCheck)
+          rectangle->mouseReleaseEvent(event,this);
+      if (lineCheck)
+          line->mouseReleaseEvent(event,this);
+      if (curveLineCheck)
+          curveLine->mouseReleaseEvent(event,this);
+      UStack->pushUndoStack(*(_image));
+
 }
 
 void ImageItem::setColor1(const QColor _color)
@@ -152,6 +178,7 @@ void ImageItem::open()
         *_image = _image->convertToFormat(QImage::Format_ARGB32_Premultiplied);
         setFixedSize(_image->size());
         currentFile = file;
+        UStack->clearAll();
 
     } else
     {
@@ -166,7 +193,10 @@ void ImageItem::saveAs()
    qDebug()<< file;
 
     if(_image->save(file))
+    {
         currentFile = file;
+        UStack->clearAll();
+    }
     else
         QMessageBox::warning(this,tr("Ошибка сохранение файла"),tr("Файл не сохранён"));
 }
@@ -175,8 +205,12 @@ void ImageItem::save()
 {
     if (currentFile.isEmpty())
         return saveAs();
+    qDebug() << currentFile;
     if (!_image->save(currentFile))
         QMessageBox::warning(this,tr("Ошибка сохранение файла"),tr("Файл не сохранён"));
+        else
+            UStack->clearAll();
+
 
 
 }
@@ -194,5 +228,20 @@ void ImageItem::setEraser(const bool b)
 void ImageItem::setEllipse(const bool b)
 {
     ellipseCheck = b;
+}
+
+void ImageItem::setRectangle(const bool b)
+{
+    rectangleCheck = b;
+}
+
+void ImageItem::setLine(const bool b)
+{
+    lineCheck = b;
+}
+
+void ImageItem::setCurveLine(const bool b)
+{
+    curveLineCheck = b;
 }
 

@@ -9,6 +9,9 @@
 #include <tools/penciltool.h>
 #include <tools/erasertool.h>
 #include <tools/ellipsetool.h>
+#include <tools/rectangletool.h>
+#include <tools/linetool.h>
+#include <tools/curvelinetool.h>
 #include "undostack.h"
 
 
@@ -16,6 +19,9 @@
 class PencilTool;
 class EraserTool;
 class EllipseTool;
+class RectangleTool;
+class LineTool;
+class CurveLineTool;
 class UndoStack;
 class ImageItem : public QWidget
 {
@@ -40,6 +46,9 @@ private:
     PencilTool *pen ;
     EraserTool *eraser;
     EllipseTool *ellipse;
+    RectangleTool *rectangle;
+    CurveLineTool *curveLine;
+    LineTool *line;
     QColor *color1;
     QColor *color2;
     QRect imageRect;
@@ -47,6 +56,9 @@ private:
     bool pencilCheck;
     bool eraserCheck;
     bool ellipseCheck;
+    bool rectangleCheck;
+    bool lineCheck;
+    bool curveLineCheck;
 
 
 protected:
@@ -71,6 +83,9 @@ public slots:
     void setPencil(const bool b);
     void setEraser(const bool b);
     void setEllipse(const bool b);
+    void setRectangle(const bool b);
+    void setLine(const bool b);
+    void setCurveLine(const bool b);
 };
 
 #endif // IMAGEITEM_H

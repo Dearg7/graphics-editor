@@ -19,7 +19,10 @@ SOURCES += main.cpp\
     widgets/colorselection.cpp \
     undostack.cpp \
     tools/erasertool.cpp \
-    tools/ellipsetool.cpp
+    tools/ellipsetool.cpp \
+    tools/rectangletool.cpp \
+    tools/linetool.cpp \
+    tools/curvelinetool.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -28,7 +31,10 @@ HEADERS  += mainwindow.h \
     widgets/colorselection.h \
     undostack.h \
     tools/erasertool.h \
-    tools/ellipsetool.h
+    tools/ellipsetool.h \
+    tools/rectangletool.h \
+    tools/linetool.h \
+    tools/curvelinetool.h
 
 
 FORMS    += mainwindow.ui

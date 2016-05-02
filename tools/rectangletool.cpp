@@ -56,7 +56,6 @@ void RectangleTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void RectangleTool::paint(ImageItem *image, bool check)
 {
     QPainter painter(image->getImage());
-    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setPen(QPen(image->getColor1(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::MiterJoin));
     if (check)
         painter.setBrush(QBrush(image->getColor2()));

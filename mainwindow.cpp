@@ -26,7 +26,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ColorSelection *CS1 = new ColorSelection(Qt::black);
     ColorSelection *CS2 = new ColorSelection(Qt::white);
     QObject::connect(CS1,SIGNAL(changeColor(QColor)),image,SLOT(setColor1(QColor)));
+    QObject::connect(image->getPipette(),SIGNAL(changeColor1(QColor)),CS1,SLOT(setColor(QColor)));
     QObject::connect(CS2,SIGNAL(changeColor(QColor)),image,SLOT(setColor2(QColor)));
+    QObject::connect(image->getPipette(),SIGNAL(changeColor2(QColor)),CS2,SLOT(setColor(QColor)));
     QHBoxLayout *Hlayout = new QHBoxLayout();
     Hlayout->addStretch(5);
     Hlayout->addWidget(CS1);
@@ -66,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent) :
     GP->addAction(ui->actionRectangle);
     GP->addAction(ui->actionLine);
     GP->addAction(ui->actionCurveLine);
+    GP->addAction(ui->actionFill);
+    GP->addAction(ui->actionPipette);
     GP->setExclusive(true);
 
     //create tool bar
@@ -79,7 +83,9 @@ MainWindow::MainWindow(QWidget *parent) :
     TB->insertAction(ui->actionSave,ui->actionOpen);
     TB->insertAction(ui->actionOpen,ui->actionCreate);
     TB->addSeparator();
-    TB->insertAction(0,ui->actionCurveLine);
+    TB->insertAction(0,ui->actionPipette);
+    TB->insertAction(ui->actionPipette,ui->actionFill);
+    TB->insertAction(ui->actionFill,ui->actionCurveLine);
     TB->insertAction(ui->actionCurveLine,ui->actionLine);
     TB->insertAction(ui->actionLine,ui->actionRectangle);
     TB->insertAction(ui->actionRectangle,ui->actionEllipse);
@@ -100,12 +106,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionRectangle,SIGNAL(toggled(bool)),image,SLOT(setRectangle(bool)));
     QObject::connect(ui->actionLine,SIGNAL(toggled(bool)),image,SLOT(setLine(bool)));
     QObject::connect(ui->actionCurveLine,SIGNAL(toggled(bool)),image,SLOT(setCurveLine(bool)));
+    QObject::connect(ui->actionFill,SIGNAL(toggled(bool)),image,SLOT(setFill(bool)));
+    QObject::connect(ui->actionPipette,SIGNAL(toggled(bool)),image,SLOT(setPipette(bool)));
     //undo and redo
     ui->actionUndo->setEnabled(false);
     ui->actionRedo->setEnabled(false);
     QObject::connect(image->getUndoStack(),SIGNAL(canUndo(bool)),ui->actionUndo,SLOT(setEnabled(bool)));
     QObject::connect(ui->actionUndo,SIGNAL(triggered(bool)),image->getUndoStack(),SLOT(undo()));
     QObject::connect(image->getUndoStack(),SIGNAL(canRedo(bool)),ui->actionRedo,SLOT(setEnabled(bool)));
+    QObject::connect(image->getUndoStack(),SIGNAL(canRedo(bool)),image,SLOT(setNewCurve(bool)));
     QObject::connect(ui->actionRedo,SIGNAL(triggered(bool)),image->getUndoStack(),SLOT(redo()));
 
 

@@ -41,7 +41,6 @@ void EraserTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void EraserTool::paint(ImageItem *image)
 {
     QPainter painter(image->getImage());
-    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setPen(QPen(Qt::white,image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     if (EndPoint == BeginPoint )
         painter.drawPoint(BeginPoint);

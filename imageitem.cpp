@@ -21,17 +21,24 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     ellipse = new EllipseTool();
     rectangle = new RectangleTool();
     curveLine = new CurveLineTool();
+    fill = new FillTool();
     line = new LineTool();
+    pipette = new PipetteTool();
+    QObject::connect(pipette,SIGNAL(changeColor1(QColor)),this,SLOT(setColor1(QColor)));
+    QObject::connect(pipette,SIGNAL(changeColor2(QColor)),this,SLOT(setColor2(QColor)));
     color1 = new QColor(Qt::black);
     color2 = new QColor(Qt::white);
     size = 10;
     imageRect = _image->rect();
+    newCurve = false;
     pencilCheck = false;
     eraserCheck = false;
     ellipseCheck = false;
     rectangleCheck = false;
     lineCheck = false;
     curveLineCheck = false;
+    fillCheck = false;
+    pipetteCheck = false;
     UStack = new UndoStack(this);
 }
 
@@ -43,6 +50,12 @@ ImageItem::~ImageItem()
 QImage *ImageItem::getImage()
 {
     return _image;
+
+}
+
+bool ImageItem::getNewCurve()
+{
+    return newCurve;
 
 }
 
@@ -64,6 +77,12 @@ QColor ImageItem::getColor2()
 
 }
 
+PipetteTool *ImageItem::getPipette()
+{
+    return pipette;
+
+}
+
 int ImageItem::getSize()
 {
     return size;
@@ -81,17 +100,17 @@ void ImageItem::paintEvent(QPaintEvent *)
     imageRect = _image->rect();
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.save();
+
 
     painter.setBrush(Qt::white);
     painter.setPen(Qt::black);
-
     painter.drawRect(imageRect);
 
-    painter.drawImage(0,0,*_image);
+    painter.drawPixmap(0,0,_image->width(),_image->height(),QPixmap::fromImage(*_image));
 
     painter.restore();
-
 
 
 }
@@ -104,17 +123,49 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
    qDebug() << "Nigga";
 
   if (pencilCheck)
+  {
+      UStack->pushUndoStack(*(_image));
       pen->mousePressEvent(event,this);
+
+   }
   if (eraserCheck)
+  {
+       UStack->pushUndoStack(*(_image));
       eraser->mousePressEvent(event,this);
+
+  }
   if (ellipseCheck)
+  {
+      UStack->pushUndoStack(*(_image));
       ellipse->mousePressEvent(event,this);
+
+  }
   if (rectangleCheck)
+   {
+      UStack->pushUndoStack(*(_image));
       rectangle->mousePressEvent(event,this);
+
+  }
   if (lineCheck)
+  {
+      UStack->pushUndoStack(*(_image));
       line->mousePressEvent(event,this);
+
+  }
+  if (fillCheck)
+  {
+      UStack->pushUndoStack(*(_image));
+     fill->mousePressEvent(event,this);
+
+  }
   if (curveLineCheck)
       curveLine->mousePressEvent(event,this);
+  if (pipetteCheck)
+  {
+       pipette->mousePressEvent(event,this);
+       qDebug() << "Nigga Pipette";
+      }
+
 }
 
 void ImageItem::mouseMoveEvent(QMouseEvent *event)
@@ -138,18 +189,32 @@ void ImageItem::mouseMoveEvent(QMouseEvent *event)
 void ImageItem::mouseReleaseEvent(QMouseEvent *event)
 {
       if (pencilCheck)
+      {
             pen->mouseReleaseEvent(event,this);
+      }
       if (eraserCheck)
+      {
           eraser->mouseReleaseEvent(event,this);
+
+      }
       if (ellipseCheck)
+      {
           ellipse->mouseReleaseEvent(event,this);
+
+      }
       if (rectangleCheck)
+      {
           rectangle->mouseReleaseEvent(event,this);
+
+       }
       if (lineCheck)
+      {
           line->mouseReleaseEvent(event,this);
+
+      }
       if (curveLineCheck)
           curveLine->mouseReleaseEvent(event,this);
-      UStack->pushUndoStack(*(_image));
+
 
 }
 
@@ -179,6 +244,7 @@ void ImageItem::open()
         setFixedSize(_image->size());
         currentFile = file;
         UStack->clearAll();
+        newCurve = true;
 
     } else
     {
@@ -196,6 +262,7 @@ void ImageItem::saveAs()
     {
         currentFile = file;
         UStack->clearAll();
+        newCurve = true;
     }
     else
         QMessageBox::warning(this,tr("Ошибка сохранение файла"),tr("Файл не сохранён"));
@@ -209,9 +276,19 @@ void ImageItem::save()
     if (!_image->save(currentFile))
         QMessageBox::warning(this,tr("Ошибка сохранение файла"),tr("Файл не сохранён"));
         else
+    {
+
             UStack->clearAll();
+            newCurve = true;
+    }
 
 
+
+}
+
+void ImageItem::setNewCurve(const bool b)
+{
+    newCurve = b;
 
 }
 
@@ -243,5 +320,15 @@ void ImageItem::setLine(const bool b)
 void ImageItem::setCurveLine(const bool b)
 {
     curveLineCheck = b;
+}
+
+void ImageItem::setFill(const bool b)
+{
+    fillCheck = b;
+}
+
+void ImageItem::setPipette(const bool b)
+{
+    pipetteCheck = b;
 }
 

@@ -12,6 +12,8 @@
 #include <tools/rectangletool.h>
 #include <tools/linetool.h>
 #include <tools/curvelinetool.h>
+#include <tools/filltool.h>
+#include <tools/pipettetool.h>
 #include "undostack.h"
 
 
@@ -22,6 +24,8 @@ class EllipseTool;
 class RectangleTool;
 class LineTool;
 class CurveLineTool;
+class FillTool;
+class PipetteTool;
 class UndoStack;
 class ImageItem : public QWidget
 {
@@ -31,9 +35,11 @@ public:
     ~ImageItem();
 
    QImage *getImage ();
+   bool getNewCurve();
    void setImage(QImage img);
    QColor getColor1();
    QColor getColor2();
+   PipetteTool *getPipette();
    int getSize();
    UndoStack *getUndoStack();
 
@@ -48,17 +54,22 @@ private:
     EllipseTool *ellipse;
     RectangleTool *rectangle;
     CurveLineTool *curveLine;
+    FillTool *fill;
     LineTool *line;
+    PipetteTool *pipette;
     QColor *color1;
     QColor *color2;
     QRect imageRect;
     int size;
+    bool newCurve;
     bool pencilCheck;
     bool eraserCheck;
     bool ellipseCheck;
     bool rectangleCheck;
     bool lineCheck;
     bool curveLineCheck;
+    bool fillCheck;
+    bool pipetteCheck;
 
 
 protected:
@@ -80,12 +91,15 @@ public slots:
     void open();
     void saveAs();
     void save();
+    void setNewCurve(const bool b);
     void setPencil(const bool b);
     void setEraser(const bool b);
     void setEllipse(const bool b);
     void setRectangle(const bool b);
     void setLine(const bool b);
     void setCurveLine(const bool b);
+    void setFill(const bool b);
+    void setPipette(const bool b);
 };
 
 #endif // IMAGEITEM_H

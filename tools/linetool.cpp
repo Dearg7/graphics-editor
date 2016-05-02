@@ -59,7 +59,6 @@ void LineTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void LineTool::paint(ImageItem *image, bool check)
 {
     QPainter painter(image->getImage());
-    painter.setRenderHint(QPainter::Antialiasing, true);
     if (check)
     {
         painter.setPen(QPen(image->getColor2(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));

@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     tools/ellipsetool.cpp \
     tools/rectangletool.cpp \
     tools/linetool.cpp \
-    tools/curvelinetool.cpp
+    tools/curvelinetool.cpp \
+    tools/filltool.cpp \
+    tools/pipettetool.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -34,7 +36,9 @@ HEADERS  += mainwindow.h \
     tools/ellipsetool.h \
     tools/rectangletool.h \
     tools/linetool.h \
-    tools/curvelinetool.h
+    tools/curvelinetool.h \
+    tools/filltool.h \
+    tools/pipettetool.h
 
 
 FORMS    += mainwindow.ui

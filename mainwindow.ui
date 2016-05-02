@@ -91,6 +91,8 @@
     <addaction name="actionRectangle"/>
     <addaction name="actionLine"/>
     <addaction name="actionCurveLine"/>
+    <addaction name="actionFill"/>
+    <addaction name="actionPipette"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -225,6 +227,22 @@
    </property>
    <property name="text">
     <string>Ломаная</string>
+   </property>
+  </action>
+  <action name="actionFill">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Заливка</string>
+   </property>
+  </action>
+  <action name="actionPipette">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Пипетка</string>
    </property>
   </action>
  </widget>

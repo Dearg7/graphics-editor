@@ -7,12 +7,13 @@ UndoStack::UndoStack(ImageItem *img,QObject *parent):QObject(parent)
    curr = 0;
    max = 30;
    numRedo = 0;
-  stack.push_back(*(img->getImage()));
+
 }
 
 
 void UndoStack::pushUndoStack(QImage img)
 {
+
     if (curr == 0)
           emit canUndo(true);
 
@@ -49,16 +50,16 @@ void UndoStack::clearAll()
     }
     curr = 0;
     numRedo = 0;
-    stack.push_back(*(UImageItem->getImage()));
     emit canUndo(false);
+    emit canRedo(false);
 }
 
 void UndoStack::undo()
 {
     if (numRedo == 0)
         emit canRedo(true);
-    redoStack.push_back(stack.takeLast());
-    UImageItem->setImage(stack.back());
+    redoStack.push_back(stack.back());
+    UImageItem->setImage(stack.takeLast());
     UImageItem->update();
     numRedo++;
     curr--;
@@ -70,8 +71,8 @@ void UndoStack::redo()
 {
     if (curr == 0)
         emit canUndo(true);
-    stack.push_back(redoStack.takeLast());
-    UImageItem->setImage(stack.back());
+    stack.push_back(redoStack.back());
+    UImageItem->setImage(stack.takeLast());
     UImageItem->update();
     numRedo--;
     curr++;

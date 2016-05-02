@@ -8,6 +8,11 @@ CurveLineTool::CurveLineTool(QObject *parent) : QObject(parent)
 
 void CurveLineTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
 {
+     if (image->getNewCurve())
+     {
+         image->setNewCurve(false);
+         amount = 0;
+     }
      if ((event->button() == Qt::LeftButton || event->button() == Qt::RightButton))
      {
          switch (amount)
@@ -16,6 +21,7 @@ void CurveLineTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
                  imageCopy = *(image->getImage());
                  EndPoint = BeginPoint = FirstPoint = SecondPoint = event->pos();
                  amount ++;
+                 image->getUndoStack()->pushUndoStack(imageCopy);
              break;
              case 1:
                  FirstPoint = SecondPoint = event->pos();
@@ -71,7 +77,6 @@ void CurveLineTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
         paint(image,true);
     }
 
-
 }
 
 void CurveLineTool::paint(ImageItem *image, bool check)
@@ -84,6 +89,7 @@ void CurveLineTool::paint(ImageItem *image, bool check)
     {
         painter.setPen(QPen(image->getColor2(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     } else
+
     {
         painter.setPen(QPen(image->getColor1(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     }

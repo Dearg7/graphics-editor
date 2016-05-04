@@ -6,10 +6,30 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QImage>
+#include <QDebug>
 #include <tools/penciltool.h>
+#include <tools/erasertool.h>
+#include <tools/ellipsetool.h>
+#include <tools/rectangletool.h>
+#include <tools/linetool.h>
+#include <tools/curvelinetool.h>
+#include <tools/filltool.h>
+#include <tools/pipettetool.h>
+#include <tools/selectiontool.h>
+#include "undostack.h"
+
+
 
 class PencilTool;
-
+class EraserTool;
+class EllipseTool;
+class RectangleTool;
+class LineTool;
+class CurveLineTool;
+class FillTool;
+class PipetteTool;
+class SelectionTool;
+class UndoStack;
 class ImageItem : public QWidget
 {
     Q_OBJECT
@@ -18,20 +38,44 @@ public:
     ~ImageItem();
 
    QImage *getImage ();
+   bool getNewCurve();
+   void setImage(QImage img);
    QColor getColor1();
    QColor getColor2();
+   PipetteTool *getPipette();
    int getSize();
-   QString currentFile;
+   UndoStack *getUndoStack();
+   SelectionTool *getSelection();
+
 
 
 private:
+    UndoStack *UStack;
+    QString currentFile;
     QImage *_image ;
     PencilTool *pen ;
+    EraserTool *eraser;
+    EllipseTool *ellipse;
+    RectangleTool *rectangle;
+    CurveLineTool *curveLine;
+    FillTool *fill;
+    LineTool *line;
+    PipetteTool *pipette;
+    SelectionTool *selection;
     QColor *color1;
     QColor *color2;
     QRect imageRect;
     int size;
-
+    bool newCurve;
+    bool pencilCheck;
+    bool eraserCheck;
+    bool ellipseCheck;
+    bool rectangleCheck;
+    bool lineCheck;
+    bool curveLineCheck;
+    bool fillCheck;
+    bool pipetteCheck;
+    bool selectionCheck;
 
 
 protected:
@@ -53,6 +97,20 @@ public slots:
     void open();
     void saveAs();
     void save();
+    void setNewCurve(const bool b);
+    void setPencil(const bool b);
+    void setEraser(const bool b);
+    void setEllipse(const bool b);
+    void setRectangle(const bool b);
+    void setLine(const bool b);
+    void setCurveLine(const bool b);
+    void setFill(const bool b);
+    void setPipette(const bool b);
+    void setSelection(const bool b);
+    void makeCopy();
+    void makeCut();
+    void makePut();
+    void clearSelection();
 };
 
 #endif // IMAGEITEM_H

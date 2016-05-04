@@ -64,7 +64,6 @@ void PencilTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void PencilTool::paint(ImageItem *image,QColor Clr)
 {
     QPainter painter(image->getImage());
-    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setPen(QPen(Clr,image->getSize(),Qt::SolidLine,Qt::RoundCap));
     if (EndPoint == BeginPoint )
         painter.drawPoint(BeginPoint);

@@ -45,6 +45,7 @@ public:
    PipetteTool *getPipette();
    int getSize();
    UndoStack *getUndoStack();
+   SelectionTool *getSelection();
 
 
 
@@ -106,6 +107,10 @@ public slots:
     void setFill(const bool b);
     void setPipette(const bool b);
     void setSelection(const bool b);
+    void makeCopy();
+    void makeCut();
+    void makePut();
+    void clearSelection();
 };
 
 #endif // IMAGEITEM_H

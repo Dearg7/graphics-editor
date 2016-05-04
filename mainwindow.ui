@@ -78,7 +78,7 @@
     <addaction name="separator"/>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
-    <addaction name="actionInsert"/>
+    <addaction name="actionPut"/>
     <addaction name="actionDelete"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -161,7 +161,7 @@
     <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="actionInsert">
+  <action name="actionPut">
    <property name="text">
     <string>Вставить</string>
    </property>

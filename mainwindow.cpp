@@ -120,6 +120,19 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(image->getUndoStack(),SIGNAL(canRedo(bool)),image,SLOT(setNewCurve(bool)));
     QObject::connect(ui->actionRedo,SIGNAL(triggered(bool)),image->getUndoStack(),SLOT(redo()));
 
+    //copy and cut and put
+
+    ui->actionCopy->setEnabled(false);
+    ui->actionCut->setEnabled(false);
+    ui->actionPut->setEnabled(false);
+    QObject::connect(image->getSelection(),SIGNAL(canCopy(bool)),ui->actionCopy,SLOT(setEnabled(bool)));
+    QObject::connect(ui->actionCopy,SIGNAL(triggered(bool)),image,SLOT(makeCopy()));
+    QObject::connect(image->getSelection(),SIGNAL(canCopy(bool)),ui->actionCut,SLOT(setEnabled(bool)));
+    QObject::connect(ui->actionCut,SIGNAL(triggered(bool)),image,SLOT(makeCut()));
+    QObject::connect(image->getSelection(),SIGNAL(canPut(bool)),ui->actionPut,SLOT(setEnabled(bool)));
+    QObject::connect(ui->actionPut,SIGNAL(triggered(bool)),image,SLOT(makePut()));
+    QObject::connect(ui->actionSelection,SIGNAL(changed()),image,SLOT(clearSelection()));
+
 
     ui->scrollArea->setBackgroundRole(QPalette :: Dark);
     ui->scrollArea->setWidget(image);

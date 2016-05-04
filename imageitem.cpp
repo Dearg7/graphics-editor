@@ -97,6 +97,12 @@ UndoStack *ImageItem::getUndoStack()
 
 }
 
+SelectionTool *ImageItem::getSelection()
+{
+    return selection;
+
+}
+
 void ImageItem::paintEvent(QPaintEvent *)
 {
     imageRect = _image->rect();
@@ -126,31 +132,32 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 
   if (pencilCheck)
   {
-
+        UStack->pushUndoStack(*(_image));
       pen->mousePressEvent(event,this);
 
    }
   if (eraserCheck)
   {
 
+      UStack->pushUndoStack(*(_image));
       eraser->mousePressEvent(event,this);
 
   }
   if (ellipseCheck)
   {
-
+      UStack->pushUndoStack(*(_image));
       ellipse->mousePressEvent(event,this);
 
   }
   if (rectangleCheck)
    {
-
+      UStack->pushUndoStack(*(_image));
       rectangle->mousePressEvent(event,this);
 
   }
   if (lineCheck)
   {
-
+      UStack->pushUndoStack(*(_image));
       line->mousePressEvent(event,this);
 
   }
@@ -197,30 +204,29 @@ void ImageItem::mouseReleaseEvent(QMouseEvent *event)
       if (pencilCheck)
       {
             pen->mouseReleaseEvent(event,this);
-            UStack->pushUndoStack(*(_image));
+
       }
       if (eraserCheck)
       {
           eraser->mouseReleaseEvent(event,this);
-          UStack->pushUndoStack(*(_image));
 
       }
       if (ellipseCheck)
       {
           ellipse->mouseReleaseEvent(event,this);
-          UStack->pushUndoStack(*(_image));
+
 
       }
       if (rectangleCheck)
       {
           rectangle->mouseReleaseEvent(event,this);
-          UStack->pushUndoStack(*(_image));
+
 
        }
       if (lineCheck)
       {
           line->mouseReleaseEvent(event,this);
-          UStack->pushUndoStack(*(_image));
+
 
       }
       if (curveLineCheck)
@@ -352,5 +358,27 @@ void ImageItem::setSelection(const bool b)
         setMouseTracking(true);
     else
         setMouseTracking(false);
+}
+
+void ImageItem::makeCopy()
+{
+    selection->copyImage(this);
+}
+
+void ImageItem::makeCut()
+{
+    selection->cutImage(this);
+}
+
+void ImageItem::makePut()
+{
+    selection->putImage(this);
+
+}
+
+void ImageItem::clearSelection()
+{
+    selection->clearSelection(this);
+
 }
 

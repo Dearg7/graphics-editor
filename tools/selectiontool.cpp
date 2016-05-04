@@ -1,9 +1,11 @@
 #include "selectiontool.h"
+#include <QClipboard>
+#include <QApplication>
 
 
 SelectionTool::SelectionTool(QObject *parent) : QObject(parent)
 {
-    canPaint = selected = moving = imageSelected = resizing =  false;
+    canPaint = selected = moving = imageSelected = resizing = checkUndo = false;
 
 }
 
@@ -13,26 +15,40 @@ void SelectionTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
     {
         image->setImage(ImageCopy);
         paint(image);
-        drawBorder(image);
         if (event->pos().x() > Point1.x() &&
             event->pos().x() < Point2.x() &&
             event->pos().y() > Point1.y() &&
             event->pos().y() < Point2.y())
         {
+           if (!checkUndo)
+           {
+               checkUndo = true;
+               image->getUndoStack()->pushUndoStack(*(image->getImage()));
+
+           }
+
            if (!imageSelected)
            {
                paintBackground(image);
                imageSelected = true;
            }
 
+
            moving = true;
            movePoint =  event->pos();
+           drawBorder(image);
            return;
         } else if (event->pos().x() >= Point2.x() &&
                    event->pos().x() <= Point2.x() + 5 &&
                    event->pos().y() >= Point2.y() &&
                    event->pos().y() <= Point2.y() + 5)
         {
+            if (!checkUndo)
+            {
+                checkUndo = true;
+                image->getUndoStack()->pushUndoStack(*(image->getImage()));
+
+            }
             if (!imageSelected)
             {
                 paintBackground(image);
@@ -40,6 +56,7 @@ void SelectionTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
             }
             resizing = true;
 
+            drawBorder(image);
             return;
         }else
 
@@ -63,11 +80,10 @@ void SelectionTool::mouseMoveEvent(QMouseEvent *event, ImageItem *image)
     {
         if (moving)
          {
-            qDebug() << Point1 << Point2;
-            qDebug() << "Selected Nigga";
+
             Point2 = Point2 + (event->pos() - movePoint);
             Point1 = Point1 + (event->pos() - movePoint);
-            qDebug() << Point1 << Point2;
+
             movePoint = event->pos();
             image->setImage(ImageCopy);
              paint(image);
@@ -164,9 +180,87 @@ void SelectionTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
            }
 
            canPaint = false;
+           emit canCopy(true);
 
         }
     }
+}
+
+void SelectionTool::copyImage(ImageItem *image)
+{
+
+    qDebug() <<"Copy Nigga";
+    if (selected)
+    {
+
+        qDebug() << "Selected Nigga";
+        QClipboard *clipboard = QApplication::clipboard();
+        image->setImage(ImageCopy);
+        paint(image);
+
+        if (imageSelected)
+        {
+            clipboard->setImage(ImageSelection);
+        }else
+        {
+            clipboard->setImage(image->getImage()->copy(Point1.x(),Point1.y(),Point2.x()-Point1.x() + 1,Point2.y()-Point1.y() + 1));
+        }
+        emit canPut(true);
+        emit canCopy(false);
+
+    }
+
+}
+
+void SelectionTool::cutImage(ImageItem *image)
+{
+    if (selected)
+    {
+        copyImage(image);
+        image->setImage(ImageCopy);
+        paint(image);
+        image->getUndoStack()->pushUndoStack(*(image->getImage()));
+        image->setImage(ImageCopy);
+        if(!imageSelected)
+        {
+            paintBackground(image);
+
+        }
+        canPaint = selected = moving = imageSelected = resizing =  false;
+        image->update();
+
+
+
+    }
+
+
+}
+
+void SelectionTool::putImage(ImageItem *image)
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    if (selected)
+    {
+        image->setImage(ImageCopy);
+        paint(image);
+
+    }
+
+    QImage put = clipboard->image();
+    if (!put.isNull())
+    {
+       image->getUndoStack()->pushUndoStack(*(image->getImage()));
+       ImageSelection = put;
+       ImageCopy = *(image->getImage());
+       Point1 = QPoint(0,0);
+       Point2 = QPoint(QPoint(put.width(),put.height()) - QPoint(1,1));
+       selected = imageSelected = checkUndo = true;
+       paint(image);
+
+       drawBorder(image);
+
+    }
+
 }
 
 void SelectionTool::drawBorder(ImageItem *image)
@@ -185,7 +279,7 @@ void SelectionTool::updateCursor(QMouseEvent *event, ImageItem *image)
 {
     if (selected)
         {
-            qDebug() << "Selected Nigga";
+
             if (event->pos().x() > Point1.x() &&
                 event->pos().x() < Point2.x() &&
                 event->pos().y() > Point1.y() &&
@@ -218,8 +312,10 @@ void SelectionTool::clearSelection(ImageItem *image)
          image->setImage(ImageCopy);
          paint(image);
          ImageCopy = *(image->getImage());
-         canPaint = selected = moving = imageSelected = resizing =  false;
+         canPaint = selected = moving = imageSelected = resizing = checkUndo =  false;
          image->update();
+
+         emit canCopy(false);
 
      }
 
@@ -236,8 +332,7 @@ void SelectionTool::paintBackground(ImageItem *image)
     painter.drawRect(QRect(Point1,Point2 - QPoint(1,1)));
     painter.end();
     ImageCopy = *(image->getImage());
-    paint(image);
-    drawBorder(image);
+
 }
 
 void SelectionTool::paint(ImageItem *image)

@@ -17,19 +17,26 @@ public:
     void mouseMoveEvent(QMouseEvent *event,ImageItem *image);
     void mouseReleaseEvent(QMouseEvent *event,ImageItem *image);
 
+    void copyImage(ImageItem *image);
+    void cutImage(ImageItem *image);
+    void putImage(ImageItem *image);
+    void clearSelection(ImageItem *image);
+
 protected:
     void drawBorder(ImageItem *image);
     void updateCursor(QMouseEvent *event,ImageItem *image);
-    void clearSelection(ImageItem *image);
+
     void paintBackground(ImageItem *image);
     void paint(ImageItem *image);
 
 
 
-    bool selected,canPaint,moving,changing,imageSelected,resizing;
+    bool selected,canPaint,moving,changing,imageSelected,resizing,checkUndo;
     QImage ImageCopy,ImageSelection;
     QPoint Point1,Point2,movePoint;
 signals:
+    void canPut(const bool b);
+    void canCopy(const bool b);
 
 public slots:
 };

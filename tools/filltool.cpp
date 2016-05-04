@@ -35,6 +35,7 @@ void FillTool::paint(ImageItem *image, bool check)
         newColor = image->getColor1();
     if (newColor == color)
             return;
+    image->getUndoStack()->pushUndoStack(*img);
     img->setPixelColor(CurrentPoint,newColor);
     while(!list.isEmpty())
     {

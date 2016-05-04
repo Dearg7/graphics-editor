@@ -2,7 +2,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QImage>
-#include <QDebug>
+
 #include "tools/penciltool.h"
 #include <QFileDialog>
 #include <QTextCodec>
@@ -24,6 +24,7 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     fill = new FillTool();
     line = new LineTool();
     pipette = new PipetteTool();
+    selection = new SelectionTool();
     QObject::connect(pipette,SIGNAL(changeColor1(QColor)),this,SLOT(setColor1(QColor)));
     QObject::connect(pipette,SIGNAL(changeColor2(QColor)),this,SLOT(setColor2(QColor)));
     color1 = new QColor(Qt::black);
@@ -39,6 +40,7 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     curveLineCheck = false;
     fillCheck = false;
     pipetteCheck = false;
+    selectionCheck  = false;
     UStack = new UndoStack(this);
 }
 
@@ -124,40 +126,42 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 
   if (pencilCheck)
   {
-      UStack->pushUndoStack(*(_image));
+
       pen->mousePressEvent(event,this);
 
    }
   if (eraserCheck)
   {
-       UStack->pushUndoStack(*(_image));
+
       eraser->mousePressEvent(event,this);
 
   }
   if (ellipseCheck)
   {
-      UStack->pushUndoStack(*(_image));
+
       ellipse->mousePressEvent(event,this);
 
   }
   if (rectangleCheck)
    {
-      UStack->pushUndoStack(*(_image));
+
       rectangle->mousePressEvent(event,this);
 
   }
   if (lineCheck)
   {
-      UStack->pushUndoStack(*(_image));
+
       line->mousePressEvent(event,this);
 
   }
   if (fillCheck)
   {
-      UStack->pushUndoStack(*(_image));
+
      fill->mousePressEvent(event,this);
 
   }
+  if (selectionCheck)
+      selection->mousePressEvent(event,this);
   if (curveLineCheck)
       curveLine->mousePressEvent(event,this);
   if (pipetteCheck)
@@ -182,6 +186,8 @@ void ImageItem::mouseMoveEvent(QMouseEvent *event)
          line->mouseMoveEvent(event,this);
      if (curveLineCheck)
          curveLine->mouseMoveEvent(event,this);
+     if (selectionCheck)
+         selection->mouseMoveEvent(event,this);
 
 
 }
@@ -191,29 +197,36 @@ void ImageItem::mouseReleaseEvent(QMouseEvent *event)
       if (pencilCheck)
       {
             pen->mouseReleaseEvent(event,this);
+            UStack->pushUndoStack(*(_image));
       }
       if (eraserCheck)
       {
           eraser->mouseReleaseEvent(event,this);
+          UStack->pushUndoStack(*(_image));
 
       }
       if (ellipseCheck)
       {
           ellipse->mouseReleaseEvent(event,this);
+          UStack->pushUndoStack(*(_image));
 
       }
       if (rectangleCheck)
       {
           rectangle->mouseReleaseEvent(event,this);
+          UStack->pushUndoStack(*(_image));
 
        }
       if (lineCheck)
       {
           line->mouseReleaseEvent(event,this);
+          UStack->pushUndoStack(*(_image));
 
       }
       if (curveLineCheck)
           curveLine->mouseReleaseEvent(event,this);
+      if (selectionCheck)
+          selection->mouseReleaseEvent(event,this);
 
 
 }
@@ -330,5 +343,14 @@ void ImageItem::setFill(const bool b)
 void ImageItem::setPipette(const bool b)
 {
     pipetteCheck = b;
+}
+
+void ImageItem::setSelection(const bool b)
+{
+    selectionCheck = b;
+    if (b)
+        setMouseTracking(true);
+    else
+        setMouseTracking(false);
 }
 

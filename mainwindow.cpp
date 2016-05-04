@@ -70,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     GP->addAction(ui->actionCurveLine);
     GP->addAction(ui->actionFill);
     GP->addAction(ui->actionPipette);
+    GP->addAction(ui->actionSelection);
     GP->setExclusive(true);
 
     //create tool bar
@@ -83,7 +84,8 @@ MainWindow::MainWindow(QWidget *parent) :
     TB->insertAction(ui->actionSave,ui->actionOpen);
     TB->insertAction(ui->actionOpen,ui->actionCreate);
     TB->addSeparator();
-    TB->insertAction(0,ui->actionPipette);
+    TB->insertAction(0,ui->actionSelection);
+    TB->insertAction(ui->actionSelection,ui->actionPipette);
     TB->insertAction(ui->actionPipette,ui->actionFill);
     TB->insertAction(ui->actionFill,ui->actionCurveLine);
     TB->insertAction(ui->actionCurveLine,ui->actionLine);
@@ -108,6 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionCurveLine,SIGNAL(toggled(bool)),image,SLOT(setCurveLine(bool)));
     QObject::connect(ui->actionFill,SIGNAL(toggled(bool)),image,SLOT(setFill(bool)));
     QObject::connect(ui->actionPipette,SIGNAL(toggled(bool)),image,SLOT(setPipette(bool)));
+    QObject::connect(ui->actionSelection,SIGNAL(toggled(bool)),image,SLOT(setSelection(bool)));
     //undo and redo
     ui->actionUndo->setEnabled(false);
     ui->actionRedo->setEnabled(false);

@@ -93,6 +93,7 @@
     <addaction name="actionCurveLine"/>
     <addaction name="actionFill"/>
     <addaction name="actionPipette"/>
+    <addaction name="actionSelection"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -243,6 +244,14 @@
    </property>
    <property name="text">
     <string>Пипетка</string>
+   </property>
+  </action>
+  <action name="actionSelection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Выделеть</string>
    </property>
   </action>
  </widget>

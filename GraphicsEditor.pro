@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     tools/linetool.cpp \
     tools/curvelinetool.cpp \
     tools/filltool.cpp \
-    tools/pipettetool.cpp
+    tools/pipettetool.cpp \
+    tools/selectiontool.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     tools/linetool.h \
     tools/curvelinetool.h \
     tools/filltool.h \
-    tools/pipettetool.h
+    tools/pipettetool.h \
+    tools/selectiontool.h
 
 
 FORMS    += mainwindow.ui

@@ -67,3 +67,4 @@ void EllipseTool::paint(ImageItem *image, bool check)
     painter.end();
     image->update();
 }
+

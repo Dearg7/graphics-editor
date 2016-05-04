@@ -6,6 +6,7 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QImage>
+#include <QDebug>
 #include <tools/penciltool.h>
 #include <tools/erasertool.h>
 #include <tools/ellipsetool.h>
@@ -14,6 +15,7 @@
 #include <tools/curvelinetool.h>
 #include <tools/filltool.h>
 #include <tools/pipettetool.h>
+#include <tools/selectiontool.h>
 #include "undostack.h"
 
 
@@ -26,6 +28,7 @@ class LineTool;
 class CurveLineTool;
 class FillTool;
 class PipetteTool;
+class SelectionTool;
 class UndoStack;
 class ImageItem : public QWidget
 {
@@ -57,6 +60,7 @@ private:
     FillTool *fill;
     LineTool *line;
     PipetteTool *pipette;
+    SelectionTool *selection;
     QColor *color1;
     QColor *color2;
     QRect imageRect;
@@ -70,6 +74,7 @@ private:
     bool curveLineCheck;
     bool fillCheck;
     bool pipetteCheck;
+    bool selectionCheck;
 
 
 protected:
@@ -100,6 +105,7 @@ public slots:
     void setCurveLine(const bool b);
     void setFill(const bool b);
     void setPipette(const bool b);
+    void setSelection(const bool b);
 };
 
 #endif // IMAGEITEM_H

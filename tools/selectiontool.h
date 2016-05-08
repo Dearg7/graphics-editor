@@ -29,9 +29,10 @@ protected:
     void paintBackground(ImageItem *image);
     void paint(ImageItem *image);
 
-
+private:
 
     bool selected,canPaint,moving,changing,imageSelected,resizing,checkUndo;
+    double z;
     QImage ImageCopy,ImageSelection;
     QPoint Point1,Point2,movePoint;
 signals:

@@ -69,6 +69,7 @@ void SelectionTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
         Point1 = Point2 = event->pos();
         ImageCopy = *(image->getImage());
         canPaint = true;
+        z = image->getZoom();
 
     }
 }
@@ -155,7 +156,7 @@ void SelectionTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 
             image->setImage(ImageCopy);
             paint(image);
-            ImageSelection = image->getImage()->copy(Point1.x(),Point1.y(),Point2.x()-Point1.x() + 1,Point2.y()-Point1.y() + 1);
+            ImageSelection = image->getImage()->copy(Point1.x()/z,Point1.y()/z,(Point2.x()-Point1.x() + 1)/z,(Point2.y()-Point1.y() + 1)/z);
             paint(image);
 
             drawBorder(image);
@@ -173,7 +174,7 @@ void SelectionTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
            {
                image->setImage(ImageCopy);
 
-               ImageSelection = image->getImage()->copy(Point1.x(),Point1.y(),Point2.x()-Point1.x() + 1,Point2.y()-Point1.y() + 1);
+               ImageSelection = image->getImage()->copy(Point1.x()/z,Point1.y()/z,(Point2.x()-Point1.x() + 1)/z,(Point2.y()-Point1.y() + 1)/z);
 
                drawBorder(image);
                selected = true;
@@ -203,7 +204,7 @@ void SelectionTool::copyImage(ImageItem *image)
             clipboard->setImage(ImageSelection);
         }else
         {
-            clipboard->setImage(image->getImage()->copy(Point1.x(),Point1.y(),Point2.x()-Point1.x() + 1,Point2.y()-Point1.y() + 1));
+            clipboard->setImage(image->getImage()->copy(Point1.x()/z,Point1.y()/z,(Point2.x()-Point1.x() + 1)/z,(Point2.y()-Point1.y() + 1)/z));
         }
         emit canPut(true);
         emit canCopy(false);
@@ -253,7 +254,7 @@ void SelectionTool::putImage(ImageItem *image)
        ImageSelection = put;
        ImageCopy = *(image->getImage());
        Point1 = QPoint(0,0);
-       Point2 = QPoint(QPoint(put.width(),put.height()) - QPoint(1,1));
+       Point2 = QPoint(QPoint(put.width(),put.height()) - QPoint(1,1))*z;
        selected = imageSelected = checkUndo = true;
        paint(image);
 
@@ -269,7 +270,7 @@ void SelectionTool::drawBorder(ImageItem *image)
     {
         QPainter painter(image->getImage());
         painter.setPen(QPen(Qt::blue,1,Qt::DashLine,Qt::RoundCap,Qt::RoundJoin));
-        painter.drawRect(QRect(Point1,Point2 - QPoint(1,1)));
+        painter.drawRect(QRect(Point1/z,Point2/z - QPoint(1,1)));
         painter.end();
         image->update();
     }
@@ -329,7 +330,7 @@ void SelectionTool::paintBackground(ImageItem *image)
     painter.setPen(Qt::white);
     painter.setBrush(Qt::white);
     painter.setBackgroundMode(Qt::OpaqueMode);
-    painter.drawRect(QRect(Point1,Point2 - QPoint(1,1)));
+    painter.drawRect(QRect(Point1/z,Point2/z - QPoint(1,1)));
     painter.end();
     ImageCopy = *(image->getImage());
 
@@ -342,7 +343,7 @@ void SelectionTool::paint(ImageItem *image)
         if (Point1 != Point2)
         {
             QPainter painter(image->getImage());
-            painter.drawImage(QRect(Point1,Point2),ImageSelection,QRect(0,0,ImageSelection.width(),ImageSelection.height()));
+            painter.drawImage(QRect(Point1/z,Point2/z),ImageSelection,QRect(0,0,ImageSelection.width(),ImageSelection.height()));
             painter.end();
             image->update();
         }

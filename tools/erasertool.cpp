@@ -41,11 +41,12 @@ void EraserTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void EraserTool::paint(ImageItem *image)
 {
     QPainter painter(image->getImage());
+    double z = image->getZoom();
     painter.setPen(QPen(Qt::white,image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     if (EndPoint == BeginPoint )
-        painter.drawPoint(BeginPoint);
+        painter.drawPoint(BeginPoint/z);
     if (EndPoint != BeginPoint)
-        painter.drawLine(BeginPoint,EndPoint);
+        painter.drawLine(BeginPoint/z,EndPoint/z);
     painter.end();
     image->update();
 }

@@ -7,9 +7,10 @@ PipetteTool::PipetteTool(QObject *parent) : QObject(parent)
 
 void PipetteTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
 {
-    if ((image->getImage()->width() > event->x())&&(event->x() >= 0) && (image->getImage()->height() > event->y())&&(event->y() >= 0))
+    double z = image->getZoom();
+    if ((image->getImage()->width() > event->x()/z)&&(event->x() >= 0) && (image->getImage()->height() > event->y()/z)&&(event->y() >= 0))
     {
-    QColor color = image->getImage()->pixelColor(event->pos());
+    QColor color = image->getImage()->pixelColor(event->pos()/z);
     if ((event->button() == Qt::LeftButton))
     {
         emit changeColor1(color);

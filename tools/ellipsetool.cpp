@@ -59,11 +59,12 @@ void EllipseTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void EllipseTool::paint(ImageItem *image, bool check)
 {
     QPainter painter(image->getImage());
+    double z = image->getZoom();
     painter.setPen(QPen(image->getColor1(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     if (check)
         painter.setBrush(QBrush(image->getColor2()));
     if (BeginPoint != EndPoint)
-    painter.drawEllipse(QRect(BeginPoint,EndPoint));
+    painter.drawEllipse(QRect(BeginPoint/z,EndPoint/z));
     painter.end();
     image->update();
 }

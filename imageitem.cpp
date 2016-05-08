@@ -30,7 +30,9 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     color1 = new QColor(Qt::black);
     color2 = new QColor(Qt::white);
     size = 10;
+    iZoom = 100;
     imageRect = _image->rect();
+    imageSize = _image->size();
     newCurve = false;
     pencilCheck = false;
     eraserCheck = false;
@@ -42,6 +44,7 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     pipetteCheck = false;
     selectionCheck  = false;
     UStack = new UndoStack(this);
+
 }
 
 ImageItem::~ImageItem()
@@ -103,10 +106,27 @@ SelectionTool *ImageItem::getSelection()
 
 }
 
+double ImageItem::getZoom()
+{
+    return iZoom/100;
+
+}
+
+void ImageItem::zooming()
+{
+    qDebug() << "Zoooooooooooooooooming";
+
+    *_image = _image->transformed(QTransform::fromScale(iZoom/prevZoom,(iZoom/prevZoom)));
+    setFixedSize(_image->size());
+    clearSelection();
+    update();
+
+}
+
 void ImageItem::paintEvent(QPaintEvent *)
 {
-    imageRect = _image->rect();
-
+    imageRect = QRect(QPoint(0,0),_image->size()*(iZoom/100));
+    setFixedSize(imageSize*(iZoom/100));
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.save();
@@ -115,8 +135,8 @@ void ImageItem::paintEvent(QPaintEvent *)
     painter.setBrush(Qt::white);
     painter.setPen(Qt::black);
     painter.drawRect(imageRect);
-
-    painter.drawPixmap(0,0,_image->width(),_image->height(),QPixmap::fromImage(*_image));
+    QImage img = _image->transformed(QTransform::fromScale(iZoom/100,iZoom/100));
+    painter.drawImage(imageRect,img);
 
     painter.restore();
 
@@ -128,7 +148,6 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 
 
 
-   qDebug() << "Nigga";
 
   if (pencilCheck)
   {
@@ -181,6 +200,7 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 
 void ImageItem::mouseMoveEvent(QMouseEvent *event)
 {
+       qDebug() << event->pos();
      if (pencilCheck)
             pen->mouseMoveEvent(event,this);
      if (eraserCheck)
@@ -261,9 +281,12 @@ void ImageItem::open()
     {
         *_image = _image->convertToFormat(QImage::Format_ARGB32_Premultiplied);
         setFixedSize(_image->size());
+        imageSize = _image->size();
+
         currentFile = file;
         UStack->clearAll();
         newCurve = true;
+        iZoom = 100;
 
     } else
     {
@@ -380,5 +403,44 @@ void ImageItem::clearSelection()
 {
     selection->clearSelection(this);
 
+}
+
+void ImageItem::zoomPlus()
+{
+    if (iZoom == 400)
+           return;
+     prevZoom = iZoom;
+    if (iZoom < 100)
+        iZoom += 25; else
+        {
+                if (iZoom < 300)
+                    iZoom += 50; else
+                        iZoom += 100;
+        }
+    //zooming();
+    update();
+
+}
+
+void ImageItem::zoomMinus()
+{
+    qDebug() << "Nigga";
+
+    if (iZoom == 25)
+           return;
+     prevZoom = iZoom;
+    if (iZoom <= 100)
+        iZoom -= 25; else
+        {
+                if (iZoom <= 300)
+                    iZoom -= 50; else
+                        iZoom -= 100;
+        }
+
+    qDebug() << "Nigga2";
+
+
+    //zooming();
+    update();
 }
 

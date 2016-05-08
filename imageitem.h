@@ -46,6 +46,7 @@ public:
    int getSize();
    UndoStack *getUndoStack();
    SelectionTool *getSelection();
+   double getZoom();
 
 
 
@@ -65,7 +66,9 @@ private:
     QColor *color1;
     QColor *color2;
     QRect imageRect;
+    QSize imageSize;
     int size;
+    double iZoom,prevZoom;
     bool newCurve;
     bool pencilCheck;
     bool eraserCheck;
@@ -76,6 +79,10 @@ private:
     bool fillCheck;
     bool pipetteCheck;
     bool selectionCheck;
+
+
+    void zooming();
+
 
 
 protected:
@@ -111,6 +118,9 @@ public slots:
     void makeCut();
     void makePut();
     void clearSelection();
+    void zoomPlus();
+    void zoomMinus();
+
 };
 
 #endif // IMAGEITEM_H

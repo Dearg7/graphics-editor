@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QToolBar>
 #include <QActionGroup>
+#include <QPushButton>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -60,6 +61,32 @@ MainWindow::MainWindow(QWidget *parent) :
     dock->setMaximumWidth(300);
 
     addDockWidget(Qt::RightDockWidgetArea,dock);
+
+    QHBoxLayout *topLayout = new QHBoxLayout();
+    QPushButton *plusZoom = new QPushButton("+");
+    QPushButton *minusZoom = new QPushButton("-");
+    QSlider *zoomSlider = new QSlider(Qt::Horizontal);
+    zoomSlider->setMaximum(1000);
+    zoomSlider->setMinimum(25);
+    zoomSlider->setValue(100);
+     topLayout->addWidget(minusZoom);
+    topLayout->addWidget(zoomSlider);
+     topLayout->addWidget(plusZoom);
+
+    QWidget *zoom = new QWidget();
+    zoom->setLayout(topLayout);
+    QToolBar *ToolBar = new QToolBar;
+    ToolBar->setAllowedAreas(Qt::BottomToolBarArea);
+    ToolBar->setFloatable(false);
+    ToolBar->setMovable(false);
+
+     ToolBar->insertWidget(0,zoom);
+    addToolBar(Qt::BottomToolBarArea,ToolBar);
+
+
+// zooming
+    QObject::connect(plusZoom,SIGNAL(clicked(bool)),image,SLOT(zoomPlus()));
+    QObject::connect(minusZoom,SIGNAL(clicked(bool)),image,SLOT(zoomMinus()));
 
     QActionGroup *GP = new QActionGroup(this);
     GP->addAction(ui->actionPencil);

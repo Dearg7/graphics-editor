@@ -56,11 +56,12 @@ void RectangleTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void RectangleTool::paint(ImageItem *image, bool check)
 {
     QPainter painter(image->getImage());
+    double z = image->getZoom();
     painter.setPen(QPen(image->getColor1(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::MiterJoin));
     if (check)
         painter.setBrush(QBrush(image->getColor2()));
     if (BeginPoint != EndPoint)
-    painter.drawRect(QRect(BeginPoint,EndPoint));
+    painter.drawRect(QRect(BeginPoint/z,EndPoint/z));
     painter.end();
     image->update();
 }

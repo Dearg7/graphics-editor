@@ -23,9 +23,10 @@ void FillTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
 void FillTool::paint(ImageItem *image, bool check)
 {
     QList<QPoint> list;
-    list.push_back(CurrentPoint);
+    double z = image->getZoom();
+    list.push_back(CurrentPoint/z);
     QPoint point;
-    QColor color = image->getImage()->pixelColor(CurrentPoint);
+    QColor color = image->getImage()->pixelColor(CurrentPoint/z);
 
     QImage *img = image->getImage();
     QColor newColor;
@@ -36,7 +37,7 @@ void FillTool::paint(ImageItem *image, bool check)
     if (newColor == color)
             return;
     image->getUndoStack()->pushUndoStack(*img);
-    img->setPixelColor(CurrentPoint,newColor);
+    img->setPixelColor(CurrentPoint/z,newColor);
     while(!list.isEmpty())
     {
       point = list.takeFirst();

@@ -83,8 +83,9 @@ void CurveLineTool::paint(ImageItem *image, bool check)
 {
     QPainter painter(image->getImage());
     QPainterPath path;
-    path.moveTo(BeginPoint);
-    path.cubicTo(FirstPoint,SecondPoint,EndPoint);
+    double z = image->getZoom();
+    path.moveTo(BeginPoint/z);
+    path.cubicTo(FirstPoint/z,SecondPoint/z,EndPoint/z);
     if (check)
     {
         painter.setPen(QPen(image->getColor2(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));

@@ -59,6 +59,7 @@ void LineTool::mouseReleaseEvent(QMouseEvent *event, ImageItem *image)
 void LineTool::paint(ImageItem *image, bool check)
 {
     QPainter painter(image->getImage());
+    double z = image->getZoom();
     if (check)
     {
         painter.setPen(QPen(image->getColor2(),image->getSize(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
@@ -70,10 +71,10 @@ void LineTool::paint(ImageItem *image, bool check)
 
     if (BeginPoint == EndPoint)
     {
-        painter.drawPoint(BeginPoint);
+        painter.drawPoint(BeginPoint/z);
     } else
     {
-        painter.drawLine(BeginPoint,EndPoint);
+        painter.drawLine(BeginPoint/z,EndPoint/z);
     }
     painter.end();
     image->update();

@@ -66,9 +66,9 @@ void PencilTool::paint(ImageItem *image,QColor Clr)
     QPainter painter(image->getImage());
     painter.setPen(QPen(Clr,image->getSize(),Qt::SolidLine,Qt::RoundCap));
     if (EndPoint == BeginPoint )
-        painter.drawPoint(BeginPoint);
+        painter.drawPoint(BeginPoint/image->getZoom());
     if (EndPoint != BeginPoint)
-        painter.drawLine(BeginPoint,EndPoint);
+        painter.drawLine(BeginPoint/image->getZoom(),EndPoint/image->getZoom());
     painter.end();
     image->update();
 }

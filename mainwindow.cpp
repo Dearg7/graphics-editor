@@ -11,6 +11,7 @@
 #include <QToolBar>
 #include <QActionGroup>
 #include <QPushButton>
+#include <QSpinBox>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -36,16 +37,14 @@ MainWindow::MainWindow(QWidget *parent) :
     Hlayout->addWidget(CS2);
     Hlayout->addStretch(5);
 
-    //Create slider
-    QSlider *slider = new QSlider(Qt::Horizontal);
-    slider->setMaximum(100);
-    slider->setMinimum(1);
-    slider->setValue(10);
-    QObject::connect(slider,SIGNAL(valueChanged(int)),image,SLOT(setSize(int)));
+   // create slider
+    QHBoxLayout *SSBlayout = new QHBoxLayout();
+    SSBlayout->addWidget(image->getSlider());
+    SSBlayout->addWidget(image->getSpinBox());
 
 
     QVBoxLayout *Blayout = new QVBoxLayout();
-    Blayout->addWidget(slider);
+    Blayout->addLayout(SSBlayout);
     Blayout->addLayout(Hlayout);
     QWidget *wdg = new QWidget();
     wdg->setLayout(Blayout);
@@ -63,9 +62,18 @@ MainWindow::MainWindow(QWidget *parent) :
     addDockWidget(Qt::RightDockWidgetArea,dock);
 
     QHBoxLayout *topLayout = new QHBoxLayout();
-    QPushButton *plusZoom = new QPushButton("+");
-    QPushButton *minusZoom = new QPushButton("-");
+    QPushButton *plusZoom = new QPushButton();
+
+    plusZoom->setIcon(QIcon(":/res/icons/zoomin.png"));
+    plusZoom->setIconSize(QSize(35,35));
+    plusZoom->setPalette(Qt::transparent);
+
+    QPushButton *minusZoom = new QPushButton();
     QSlider *zoomSlider = new QSlider(Qt::Horizontal);
+    minusZoom->setIcon(QIcon(":/res/icons/zoomout.png"));
+    minusZoom->setIconSize(QSize(35,35));
+    minusZoom->setPalette(Qt::transparent);
+
     zoomSlider->setMaximum(1000);
     zoomSlider->setMinimum(25);
     zoomSlider->setValue(100);
@@ -111,6 +119,9 @@ MainWindow::MainWindow(QWidget *parent) :
     TB->insertAction(ui->actionSave,ui->actionOpen);
     TB->insertAction(ui->actionOpen,ui->actionCreate);
     TB->addSeparator();
+    TB->insertAction(0,ui->actionRedo);
+    TB->insertAction(ui->actionRedo,ui->actionUndo);
+    TB->addSeparator();
     TB->insertAction(0,ui->actionSelection);
     TB->insertAction(ui->actionSelection,ui->actionPipette);
     TB->insertAction(ui->actionPipette,ui->actionFill);
@@ -136,8 +147,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionLine,SIGNAL(toggled(bool)),image,SLOT(setLine(bool)));
     QObject::connect(ui->actionCurveLine,SIGNAL(toggled(bool)),image,SLOT(setCurveLine(bool)));
     QObject::connect(ui->actionFill,SIGNAL(toggled(bool)),image,SLOT(setFill(bool)));
+    QObject::connect(ui->actionFill,SIGNAL(toggled(bool)),image,SLOT(senseFill(bool)));
     QObject::connect(ui->actionPipette,SIGNAL(toggled(bool)),image,SLOT(setPipette(bool)));
     QObject::connect(ui->actionSelection,SIGNAL(toggled(bool)),image,SLOT(setSelection(bool)));
+    QObject::connect(ui->actionChange,SIGNAL(triggered(bool)),image,SLOT(change()));
     //undo and redo
     ui->actionUndo->setEnabled(false);
     ui->actionRedo->setEnabled(false);

@@ -7,6 +7,8 @@
 #include <QMouseEvent>
 #include <QImage>
 #include <QDebug>
+#include <QSlider>
+#include <QSpinBox>
 #include <tools/penciltool.h>
 #include <tools/erasertool.h>
 #include <tools/ellipsetool.h>
@@ -47,6 +49,8 @@ public:
    UndoStack *getUndoStack();
    SelectionTool *getSelection();
    double getZoom();
+   QSlider *getSlider();
+   QSpinBox *getSpinBox();
 
 
 
@@ -68,6 +72,8 @@ private:
     QRect imageRect;
     QSize imageSize;
     int size;
+    int copySize;
+    int cWidth,cHeight;
     double iZoom,prevZoom;
     bool newCurve;
     bool pencilCheck;
@@ -79,6 +85,9 @@ private:
     bool fillCheck;
     bool pipetteCheck;
     bool selectionCheck;
+
+    QSlider *slider;
+    QSpinBox *spinBox;
 
 
     void zooming();
@@ -97,10 +106,12 @@ protected:
 signals:
 
 
+
 public slots:
     void setColor1(const QColor _color);
     void setColor2(const QColor _color);
     void setSize(const int _size);
+    void senseFill(const bool b);
     void open();
     void saveAs();
     void save();
@@ -120,6 +131,11 @@ public slots:
     void clearSelection();
     void zoomPlus();
     void zoomMinus();
+    void change();
+    void changeWidth(int w);
+    void changeHeight(int h);
+    void changeAccept();
+
 
 };
 

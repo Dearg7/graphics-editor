@@ -7,9 +7,10 @@
 #include <QFileDialog>
 #include <QTextCodec>
 #include <QMessageBox>
+#include "widgets/changeimagedialog.h"
 
 
-
+class ChangeImageDialog;
 ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
 {
     this->setFixedHeight(640);
@@ -44,6 +45,19 @@ ImageItem::ImageItem(QWidget *parent) : QWidget(parent)
     pipetteCheck = false;
     selectionCheck  = false;
     UStack = new UndoStack(this);
+
+    //Create slider
+    slider = new QSlider(Qt::Horizontal);
+    spinBox = new QSpinBox();
+    QObject::connect(spinBox,SIGNAL(valueChanged(int)),slider,SLOT(setValue(int)));
+    QObject::connect(slider,SIGNAL(valueChanged(int)),spinBox,SLOT(setValue(int)));
+    spinBox->setMaximum(100);
+    spinBox->setMinimum(1);
+    spinBox->setValue(10);
+    slider->setMaximum(100);
+    slider->setMinimum(1);
+    slider->setValue(10);
+    QObject::connect(slider,SIGNAL(valueChanged(int)),this,SLOT(setSize(int)));
 
 }
 
@@ -112,9 +126,20 @@ double ImageItem::getZoom()
 
 }
 
+QSlider *ImageItem::getSlider()
+{
+    return slider;
+}
+
+QSpinBox *ImageItem::getSpinBox()
+{
+    return spinBox;
+
+}
+
 void ImageItem::zooming()
 {
-    qDebug() << "Zoooooooooooooooooming";
+
 
     *_image = _image->transformed(QTransform::fromScale(iZoom/prevZoom,(iZoom/prevZoom)));
     setFixedSize(_image->size());
@@ -135,8 +160,8 @@ void ImageItem::paintEvent(QPaintEvent *)
     painter.setBrush(Qt::white);
     painter.setPen(Qt::black);
     painter.drawRect(imageRect);
-    QImage img = _image->transformed(QTransform::fromScale(iZoom/100,iZoom/100));
-    painter.drawImage(imageRect,img);
+
+    painter.drawImage(imageRect,*_image);
 
     painter.restore();
 
@@ -270,6 +295,27 @@ void ImageItem::setColor2(const QColor _color)
 void ImageItem::setSize(const int _size)
 {
     size = _size;
+}
+
+void ImageItem::senseFill(const bool b)
+{
+    if (b)
+    {
+        copySize = size;
+        size = 0;
+        slider->setMinimum(0);
+        spinBox->setMinimum(0);
+        slider->setValue(size);
+        spinBox->setValue(size);
+
+    } else
+      {
+       slider->setMinimum(1);
+       spinBox->setMinimum(1);
+       size = copySize;
+       slider->setValue(size);
+       spinBox->setValue(size);
+    }
 }
 
 void ImageItem::open()
@@ -407,7 +453,7 @@ void ImageItem::clearSelection()
 
 void ImageItem::zoomPlus()
 {
-    if (iZoom == 400)
+    if (iZoom == 500)
            return;
      prevZoom = iZoom;
     if (iZoom < 100)
@@ -442,5 +488,34 @@ void ImageItem::zoomMinus()
 
     //zooming();
     update();
+}
+
+void ImageItem::change()
+{
+    cWidth = imageSize.width();
+    cHeight = imageSize.height();
+    ChangeImageDialog *dialog = new ChangeImageDialog(imageSize.width(),imageSize.height(),this);
+    dialog->exec();
+    delete dialog;
+
+}
+
+void ImageItem::changeWidth(int w)
+{
+    cWidth = w;
+}
+
+void ImageItem::changeHeight(int h)
+{
+    cHeight = h;
+
+}
+
+void ImageItem::changeAccept()
+{
+    UStack->pushUndoStack(*_image);
+    *_image = _image->scaled(cWidth,cHeight);
+    imageSize = _image->size();
+    clearSelection();
 }
 

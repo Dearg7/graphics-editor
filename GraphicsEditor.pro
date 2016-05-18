@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     tools/curvelinetool.cpp \
     tools/filltool.cpp \
     tools/pipettetool.cpp \
-    tools/selectiontool.cpp
+    tools/selectiontool.cpp \
+    widgets/changeimagedialog.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -40,7 +41,11 @@ HEADERS  += mainwindow.h \
     tools/curvelinetool.h \
     tools/filltool.h \
     tools/pipettetool.h \
-    tools/selectiontool.h
+    tools/selectiontool.h \
+    widgets/changeimagedialog.h
 
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resources.qrc

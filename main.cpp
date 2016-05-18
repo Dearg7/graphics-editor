@@ -5,6 +5,7 @@
 #include "QHBoxLayout"
 #include <QTextCodec>
 
+
 int main(int argc, char *argv[])
 {
 
@@ -14,14 +15,8 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     w.show();
-    /*ImageItem ww;
-    ww.show();
-    QWidget *W = new QWidget();
-    QHBoxLayout *L = new QHBoxLayout();
-    ColorSelection *SR = new ColorSelection(Qt::black);
-    L->addWidget(SR);
-    W->setLayout(L);
-    W->show();*/
+
+    \
 
 
 

@@ -105,6 +105,9 @@ protected:
 
 signals:
 
+    void changeZoom(const int b);
+     void changeZoom2 (const int b);
+
 
 
 public slots:
@@ -115,6 +118,7 @@ public slots:
     void open();
     void saveAs();
     void save();
+    void create();
     void setNewCurve(const bool b);
     void setPencil(const bool b);
     void setEraser(const bool b);
@@ -131,10 +135,11 @@ public slots:
     void clearSelection();
     void zoomPlus();
     void zoomMinus();
+    void setZoom(const int b);
     void change();
     void changeWidth(int w);
     void changeHeight(int h);
-    void changeAccept();
+
 
 
 };

@@ -225,7 +225,7 @@ void ImageItem::mousePressEvent(QMouseEvent *event)
 
 void ImageItem::mouseMoveEvent(QMouseEvent *event)
 {
-       qDebug() << event->pos();
+
      if (pencilCheck)
             pen->mouseMoveEvent(event,this);
      if (eraserCheck)
@@ -325,14 +325,19 @@ void ImageItem::open()
         return;
     if (_image->load(file))
     {
+
         *_image = _image->convertToFormat(QImage::Format_ARGB32_Premultiplied);
         setFixedSize(_image->size());
         imageSize = _image->size();
 
         currentFile = file;
+        clearSelection();
         UStack->clearAll();
         newCurve = true;
         iZoom = 100;
+        emit changeZoom(4);
+        emit changeZoom2(100);
+        currentFile = "";
 
     } else
     {
@@ -344,12 +349,12 @@ void ImageItem::open()
 void ImageItem::saveAs()
 {
    QString file =  QFileDialog::getSaveFileName(this,"Сохраняем файл","", "(*.jpg);;(*.png);;(*.xpm)");
-   qDebug()<< file;
 
     if(_image->save(file))
     {
         currentFile = file;
         UStack->clearAll();
+        clearSelection();
         newCurve = true;
     }
     else
@@ -358,9 +363,18 @@ void ImageItem::saveAs()
 
 void ImageItem::save()
 {
+      QMessageBox msgBox;
+      msgBox.setWindowTitle("Сохранение");
+      msgBox.setText("Хотите ли вы сохранить файл?");
+      msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+      msgBox.setDefaultButton(QMessageBox::Yes);
+      if (msgBox.exec() == QMessageBox::No)
+        {
+          return;
+      }
     if (currentFile.isEmpty())
         return saveAs();
-    qDebug() << currentFile;
+
     if (!_image->save(currentFile))
         QMessageBox::warning(this,tr("Ошибка сохранение файла"),tr("Файл не сохранён"));
         else
@@ -368,10 +382,40 @@ void ImageItem::save()
 
             UStack->clearAll();
             newCurve = true;
+            clearSelection();
     }
 
 
 
+}
+
+void ImageItem::create()
+{
+
+    cWidth = 800;
+    cHeight = 640;
+
+    ChangeImageDialog *dialog = new ChangeImageDialog(800,640,this);
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+       iZoom = 100;
+              save();
+
+         UStack->clearAll();
+         newCurve = true;
+          qDebug() << newCurve;
+        *_image = QImage(cWidth,cHeight,QImage::Format_ARGB32_Premultiplied);
+        _image->fill(Qt::white);
+         imageSize = _image->size();
+
+        emit changeZoom(4);
+        emit changeZoom2(100);
+
+
+    }
+
+    delete dialog;
 }
 
 void ImageItem::setNewCurve(const bool b)
@@ -463,6 +507,8 @@ void ImageItem::zoomPlus()
                     iZoom += 50; else
                         iZoom += 100;
         }
+    emit changeZoom(iZoom / 25);
+
     //zooming();
     update();
 
@@ -470,7 +516,8 @@ void ImageItem::zoomPlus()
 
 void ImageItem::zoomMinus()
 {
-    qDebug() << "Nigga";
+
+
 
     if (iZoom == 25)
            return;
@@ -482,11 +529,20 @@ void ImageItem::zoomMinus()
                     iZoom -= 50; else
                         iZoom -= 100;
         }
+    emit changeZoom(iZoom / 25);
 
-    qDebug() << "Nigga2";
+
 
 
     //zooming();
+    update();
+}
+
+void ImageItem::setZoom(const int b)
+{
+    iZoom = b * 25;
+    emit changeZoom2(iZoom);
+
     update();
 }
 
@@ -495,7 +551,15 @@ void ImageItem::change()
     cWidth = imageSize.width();
     cHeight = imageSize.height();
     ChangeImageDialog *dialog = new ChangeImageDialog(imageSize.width(),imageSize.height(),this);
-    dialog->exec();
+   if  (dialog->exec() == QDialog::Accepted)
+   {
+       //UStack->pushUndoStack(*_image);
+       UStack->clearAll();
+       *_image = _image->scaled(cWidth,cHeight);
+       imageSize = _image->size();
+       clearSelection();
+       newCurve = true;
+    }
     delete dialog;
 
 }
@@ -511,11 +575,5 @@ void ImageItem::changeHeight(int h)
 
 }
 
-void ImageItem::changeAccept()
-{
-    UStack->pushUndoStack(*_image);
-    *_image = _image->scaled(cWidth,cHeight);
-    imageSize = _image->size();
-    clearSelection();
-}
+
 

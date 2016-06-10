@@ -65,30 +65,52 @@ MainWindow::MainWindow(QWidget *parent) :
     QPushButton *plusZoom = new QPushButton();
 
     plusZoom->setIcon(QIcon(":/res/icons/zoomin.png"));
-    plusZoom->setIconSize(QSize(35,35));
+    plusZoom->setIconSize(QSize(30,30));
     plusZoom->setPalette(Qt::transparent);
+    plusZoom->setFixedSize(35,35);
 
     QPushButton *minusZoom = new QPushButton();
     QSlider *zoomSlider = new QSlider(Qt::Horizontal);
     minusZoom->setIcon(QIcon(":/res/icons/zoomout.png"));
-    minusZoom->setIconSize(QSize(35,35));
+    minusZoom->setIconSize(QSize(30,30));
     minusZoom->setPalette(Qt::transparent);
+    minusZoom->setFixedSize(35,35);
 
-    zoomSlider->setMaximum(1000);
-    zoomSlider->setMinimum(25);
-    zoomSlider->setValue(100);
-     topLayout->addWidget(minusZoom);
+    zoomSlider->setMaximum(20);
+    zoomSlider->setMinimum(1);
+    zoomSlider->setValue(4);
+    zoomSlider->setPageStep(2);
+    zoomSlider->setFixedWidth(100);
+
+    QLabel *zoomLabel = new QLabel();
+    zoomLabel->setNum(100);
+    QObject::connect(image,SIGNAL(changeZoom2(int)),zoomLabel,SLOT(setNum(int)));
+    QObject::connect(zoomSlider,SIGNAL(valueChanged(int)),image,SLOT(setZoom(int)));
+    QObject::connect(image,SIGNAL(changeZoom(int)),zoomSlider,SLOT(setValue(int)));
+    topLayout->setSpacing(0);
+    topLayout->addStretch(2000);
+    topLayout->addWidget(minusZoom);
+
+
     topLayout->addWidget(zoomSlider);
-     topLayout->addWidget(plusZoom);
+
+    topLayout->addWidget(plusZoom);
+     topLayout->addSpacing(5);
+    topLayout->addWidget(zoomLabel);
+    QLabel *proc = new QLabel("%");
+    topLayout->addWidget(proc);
+    topLayout->setContentsMargins(0,0,0,0);
 
     QWidget *zoom = new QWidget();
     zoom->setLayout(topLayout);
+
     QToolBar *ToolBar = new QToolBar;
     ToolBar->setAllowedAreas(Qt::BottomToolBarArea);
     ToolBar->setFloatable(false);
     ToolBar->setMovable(false);
 
-     ToolBar->insertWidget(0,zoom);
+     ToolBar->addWidget(zoom);
+
     addToolBar(Qt::BottomToolBarArea,ToolBar);
 
 
@@ -140,6 +162,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionOpen,SIGNAL(triggered(bool)),image,SLOT(open()));
     QObject::connect(ui->actionSaveAs,SIGNAL(triggered(bool)),image,SLOT(saveAs()));
     QObject::connect(ui->actionSave,SIGNAL(triggered(bool)),image,SLOT(save()));
+    QObject::connect(ui->actionCreate,SIGNAL(triggered(bool)),image,SLOT(create()));
     QObject::connect(ui->actionPencil,SIGNAL(toggled(bool)),image,SLOT(setPencil(bool)));
     QObject::connect(ui->actionEraser,SIGNAL(toggled(bool)),image,SLOT(setEraser(bool)));
     QObject::connect(ui->actionEllipse,SIGNAL(toggled(bool)),image,SLOT(setEllipse(bool)));

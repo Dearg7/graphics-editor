@@ -36,6 +36,7 @@ void SelectionTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
 
            moving = true;
            movePoint =  event->pos();
+           paint(image);
            drawBorder(image);
            return;
         } else if (event->pos().x() >= Point2.x() &&

@@ -15,6 +15,7 @@ void EraserTool::mousePressEvent(QMouseEvent *event, ImageItem *image)
         paint(image);
     }
 
+
 }
 
 void EraserTool::mouseMoveEvent(QMouseEvent *event, ImageItem *image)
